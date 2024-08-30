@@ -18,7 +18,7 @@ const Homelist = () => {
 
     const fetchUsers = async () => {
         try {
-            const response = await axios.get('http://localhost:3002/users');
+            const response = await axios.get('http://localhost:3002/todos');
             setUsers(response.data);
         } catch (error) {
             console.error('Error fetching users:', error);
@@ -27,7 +27,7 @@ const Homelist = () => {
 
     const fetchUser = async (id) => {
         try {
-            const response = await axios.get(`http://localhost:3002/users/${id}`);
+            const response = await axios.get(`http://localhost:3002/todos/${id}`);
             setUser(response.data);
         } catch (error) {
             console.error('Error fetching user:', error);
@@ -37,7 +37,7 @@ const Homelist = () => {
 
     const addUser = async () => {
         try {
-            await axios.post('http://localhost:3002/users', { name, date });
+            await axios.post('http://localhost:3002/todos', { name, date });
             setname('');
             setDate('');
             fetchUsers();
@@ -48,7 +48,7 @@ const Homelist = () => {
 
     const updateUser = async (id) => {
         try {
-            await axios.put(`http://localhost:3002/users/${id}`, { name: editName, date: editDate });
+            await axios.put(`http://localhost:3002/todos/${id}`, { name: editName, date: editDate });
             setEditUserId(null);
             setEditName('');
             setEditDate('');
@@ -60,7 +60,7 @@ const Homelist = () => {
 
     const deleteUser = async (id) => {
         try {
-            await axios.delete(`http://localhost:3002/users/${id}`);
+            await axios.delete(`http://localhost:3002/todos/${id}`);
             fetchUsers();
         } catch (error) {
             console.error('Error deleting user:', error);
@@ -73,9 +73,7 @@ const Homelist = () => {
         setEditDate(user.date);
     };
 
-    let data = {
-       title:"to do list",
-    }
+   
   return (
    <>
   <section className='flex flex-col items-center justify-center bg-green200'>

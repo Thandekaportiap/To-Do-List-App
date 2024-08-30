@@ -26,7 +26,7 @@ const Navbar = () => {
                    <li> <NavLink to={"/"}> Home </NavLink> </li>
                    <li> <NavLink to={"/about-us"}> About Us </NavLink> </li>
                     <li><NavLink to={"/contact-us"}> Contact Us </NavLink></li>
-                    <li><NavLink to={"/Homelist"}> Homelist </NavLink></li>
+                    {/* <li><NavLink to={"/Homelist"}> Homelist </NavLink></li> */}
                    
                 </ul>
                 
@@ -52,7 +52,7 @@ const Navbar = () => {
                         <li className='border-b border-[#232323]'> <NavLink to={"/"}> Home </NavLink>  </li>
                         <li className='border-b border-[#232323]'> <NavLink to={"/about-us"}> About Us </NavLink>  </li>
                         <li className='border-b border-[#232323]'> <NavLink to={"/contact-us"}> Contact Us </NavLink> </li>
-                        <li className='border-b border-[#232323]'> <NavLink to={"/Homelist"}> Homelist </NavLink> </li>
+                        {/* <li className='border-b border-[#232323]'> <NavLink to={"/Homelist"}> Homelist </NavLink> </li> */}
                     </ul>
                     
                     {/* Mobile Buttons */}
