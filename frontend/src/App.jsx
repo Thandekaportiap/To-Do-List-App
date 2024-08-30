@@ -1,6 +1,7 @@
-import { useState } from 'react'
 import './App.css';
 import './index.css'
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import Navbar from './components/NavBar';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { AboutUs } from './pages/AboutUs';
