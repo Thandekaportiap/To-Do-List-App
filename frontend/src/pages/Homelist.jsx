@@ -76,10 +76,10 @@ const Homelist = () => {
    
   return (
    <>
-  <section className='flex flex-col items-center justify-center bg-green200'>
+  <section className='flex flex-col items-center justify-center bg-green200 '>
 
-  <div>
-            <h1>Todo Lists</h1>
+  
+            <h1 className='text-5xl font-semi-bold'>Todo Lists</h1>
             <ul>
                 {users.map(user => (
                     <li key={user.id}>
@@ -108,7 +108,8 @@ const Homelist = () => {
                     </li>
                 ))}
             </ul>
-            <h2>Add Tasks</h2>
+            <div className='border-2 border-stone-200n border-solid w-full'>
+            {/* <h2 className='text-3xl'>Add Tasks</h2> */}
             <input
                 type="text"
                 placeholder="Task"
@@ -121,14 +122,16 @@ const Homelist = () => {
                 onChange={(e) => setDate(e.target.value)}
             />
             <button onClick={addUser}>Add</button>
-            <h2>Get Task by ID</h2>
-            <input
+            </div>
+          
+           <div className='border-2 border-red-300 border-solid w-full'>
+           <input
                 type="number"
-                placeholder="Task ID"
+                placeholder="Search Task By ID"
                 value={userId}
                 onChange={(e) => setUserId(e.target.value)}
             />
-            <button onClick={() => fetchUser(userId)}>Fetch User</button>
+            <button onClick={() => fetchUser(userId)}>Search</button>
             {user && (
                 <div>
                     <h3>User Details</h3>
@@ -136,6 +139,7 @@ const Homelist = () => {
                     <p>Name: {user.name}</p>
                 </div>
             )}
+           </div>
             <h2>Delete Task by ID</h2>
             <input
                 type="number"
@@ -143,7 +147,7 @@ const Homelist = () => {
                 onChange={(e) => setUserId(e.target.value)}
             />
             <button onClick={() => deleteUser(userId)}>Delete</button>
-        </div>
+        
 
   </section>
    </>

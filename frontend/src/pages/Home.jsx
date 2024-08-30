@@ -28,7 +28,7 @@ export const Home = () => {
                  
             </div>
             <div className="mt-40">
-                <img src={Best} alt="hero" className='mr-4 rounded-lg  lg:w-fit lg:h-96 ssm:h-32 ssm:w-36' />
+                <img src={Best} alt="hero" className='mr-4 rounded-lg  lg:w-fit lg:h-96 ssm:h-32 ssm:w-36 ssm:invisible' />
             </div>
             
         </section>
