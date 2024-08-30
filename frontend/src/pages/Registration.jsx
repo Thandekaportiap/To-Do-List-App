@@ -24,7 +24,7 @@ const registration = () => {
           </div>
           <div className="mb-4">
             <label htmlFor="password" className="block mb-1 font-medium">Password</label>
-            <input type="password" id="password" placeholder="Create Your Password" className="w-full p-2 border rounded-md" />
+            <input type="password" id="password" placeholder="Create Your Password" autoComplete='off' className="w-full p-2 border rounded-md" />
           </div>
           <div className="mb-4">
             <label htmlFor="confirm password" className="block mb-1 font-medium">Confirm Password</label>
