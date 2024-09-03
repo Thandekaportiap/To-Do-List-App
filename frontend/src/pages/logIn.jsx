@@ -27,7 +27,7 @@ const logIn = () => {
       const data = await response.json();
       if (response.ok) {
         alert(data.message);
-        navigate('/Homelist'); // Navigate to Home page on successful login
+        navigate('/'); // Navigate to Home page on successful login
       } else {
         setError(data.message);
       }

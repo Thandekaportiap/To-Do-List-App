@@ -3,3 +3,25 @@
   padding: 0;
   box-sizing: border-box;
 }
+
+.lowIndicator {
+  margin-left: 1px;
+  border-right: 4px solid green;
+  width: 200px;
+  height: 20px;
+
+}
+
+.highIndicator{
+  margin-left: 1px;
+  border-right: 4px solid red;
+  width: 200px;
+  height: 20px;
+}
+
+.mediumIndicator{
+  margin-left: 1px;
+  border-right: 4px solid orange;
+  width: 200px;
+  height: 20px;
+}

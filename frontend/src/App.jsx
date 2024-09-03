@@ -11,7 +11,8 @@ import Registration from './pages/Registration';
 import Footer from "./components/Footer";
 import LogIn from './pages/logIn';
 import Homelist from './pages/Homelist';
-
+import NoPage from './pages/Nopage.jsx';
+import Layout from './pages/layout.jsx';
 
 function App() {
 
@@ -25,13 +26,13 @@ function App() {
 
     <Routes>
       <Route path='/' element={ <Home/>} /> 
-      <Route index element={<Homelist/>}/>
+      {/* <Route index element={<Home/>}/> */}
       <Route path='/about-us' element={ <AboutUs/> } /> 
       <Route path='/contact-us' element={ <ContactUs/> } />
       <Route path='/logIn' element={ <LogIn/> } />
       <Route path='/ Registration' element={ < Registration/> } /> 
       <Route path='/Homelist' element={ <Homelist/> } />
-     
+      <Route path="*" element={<NoPage />} />
     </Routes>
     <Footer/>
     </div> 

@@ -25,7 +25,7 @@ const footer = () => {
           
         </div>
       </div>
-      <p className="text-center mt-8">Built By Thandeka Portia P Mazibuko  TDList &copy; 2024</p>
+      <p className="text-center mt-8">Code By Thandeka Portia P Mazibuko  TDList &copy; 2024</p>
     </footer>
 
         </>

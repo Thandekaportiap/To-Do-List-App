@@ -104,14 +104,15 @@ const Homelist = ({ userId }) => {
           placeholder="Add a new task"
           className='py-3 '
         />
+        <input type="date"/>
 
         <select
           value={priority}
           onChange={(e) => setPriority(e.target.value)}
         >
-          <option value="low">Low Priority</option>
-          <option value="medium">Medium Priority</option>
-          <option value="high">High Priority</option>
+          <option >Low</option>
+          <option >Medium</option>
+          <option>High</option>
         </select>
 
         <button type="submit" className='bg-[green] text-[white] py-3 px-2 rounded-md'>Add Todo</button>
@@ -119,8 +120,8 @@ const Homelist = ({ userId }) => {
 
       <table className="table-auto border-separate border-spacing-2 border border-fuchsia-400 p-6">
         <thead>
-          <tr className='p-6'>
-          <th>Priority</th>
+          <tr className=''>
+          
             <th className=' border border-slate-300 bg-fuchsia-400 text-3xl'>Task</th>
             <th className=' border border-slate-300 bg-fuchsia-400 text-3xl'>Actions</th>
           </tr>
@@ -133,11 +134,13 @@ const Homelist = ({ userId }) => {
           ) : (
             filteredTodos.map((todo) => (
               <tr key={todo.id}>
-                    <td className='text-[black]'>{todo.priority}</td>
-                <td className='text-3xl'>{todo.task}</td>
-                <td className=''>
+                 
+                   
+                <td className='text-3xl border border-slate-300 p-3'>{todo.task}</td>
+                <td className='flex flex-row border border-slate-300 p-3'>
+               
                   <button onClick={() => handleEditTodo(todo)} className='m-4 bg-[green] text-[white] py-2 px-2 rounded-md'>Edit</button>
-                  <button onClick={() => handleDeleteTodo(todo.id)} className='bg-[red] text-[white] py-2 px-2 rounded-md'>Delete</button>
+                  <button onClick={() => handleDeleteTodo(todo.id)} className='m-4 bg-[red] text-[white] py-2 px-2 rounded-md'>Delete</button>
                 </td>
               </tr>
             ))
@@ -159,9 +162,9 @@ const Homelist = ({ userId }) => {
               value={priority}
               onChange={(e) => setPriority(e.target.value)}
             >
-              <option value="low">Low Priority</option>
-              <option value="medium">Medium Priority</option>
-              <option value="high">High Priority</option>
+              <option >Low Priority</option>
+              <option >Medium Priority</option>
+              <option >High Priority</option>
             </select>
             <button type="submit" className='bg-[green] m-4 text-[white] py-2 px-2 rounded-md'>Update</button>
             <button type="button" onClick={() => { setShowEditForm(false); setEditingId(null); setTask(''); }} className='bg-[red] text-[white] py-2 px-2 rounded-md'>Cancel</button>
