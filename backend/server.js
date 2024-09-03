@@ -6,7 +6,7 @@ const cors = require('cors');
 const bcrypt = require('bcrypt');
 
 const app = express();
-const port = 3002;
+const port = 3001;
 
 app.use(cors());
 app.use(bodyParser.json());
@@ -17,8 +17,7 @@ const db = new sqlite3.Database(':memory:');
 // Create users and todos tables
 db.serialize(() => {
   db.run("CREATE TABLE users (id INTEGER PRIMARY KEY, username TEXT UNIQUE, password TEXT)");
-
-  db.run("CREATE TABLE todos (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL, date)");
+  db.run("CREATE TABLE todos (id INTEGER PRIMARY KEY, user_id INTEGER, task TEXT, completed INTEGER DEFAULT 0, FOREIGN KEY(user_id) REFERENCES users(id))");
 });
 
 // User registration

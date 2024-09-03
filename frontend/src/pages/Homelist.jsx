@@ -1,157 +1,175 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
-const Homelist = () => {
+const Homelist = ({ userId }) => {
+  const [todos, setTodos] = useState([]);
+  const [task, setTask] = useState('');
+  const [editingId, setEditingId] = useState(null);
+  const [showEditForm, setShowEditForm] = useState(false);
+  const [filteredTodos, setFilteredTodos] = useState([]);
+  const [priority, setPriority] = useState('medium');
+  const [searchTerm, setSearchTerm] = useState('');
 
-  const [users, setUsers] = useState([]);
-    const [name, setname] = useState('');
-    const [date, setDate] = useState('');
-    const [user, setUser] = useState(null);
-    const [userId, setUserId] = useState(''); // Track input value for user ID
-    const [editUserId, setEditUserId] = useState(null);
-    const [editName, setEditName] = useState('');
-    const [editDate, setEditDate] = useState('');
+  const navigate = useNavigate();
 
-    useEffect(() => {
-        fetchUsers();
-    }, []); // Run only once on component mount
+  useEffect(() => {
+    if (!userId) {
+      navigate('/');
+    } else {
+      fetchTodos();
+    }
+  }, [userId]);
 
-    const fetchUsers = async () => {
-        try {
-            const response = await axios.get('http://localhost:3002/todos');
-            setUsers(response.data);
-        } catch (error) {
-            console.error('Error fetching users:', error);
-        }
-    };
+  useEffect(() => {
+    setFilteredTodos(
+      todos.filter(todo => 
+        todo.task.toLowerCase().includes(searchTerm.toLowerCase())
+      )
+    );
+  }, [searchTerm, todos]);
 
-    const fetchUser = async (id) => {
-        try {
-            const response = await axios.get(`http://localhost:3002/todos/${id}`);
-            setUser(response.data);
-        } catch (error) {
-            console.error('Error fetching user:', error);
-            setUser(null);
-        }
-    };
+  const fetchTodos = async () => {
+    const response = await fetch(`http://localhost:3001/api/todos/${userId}`);
+    const data = await response.json();
+    setTodos(data);
+    setFilteredTodos(data);
+  };
 
-    const addUser = async () => {
-        try {
-            await axios.post('http://localhost:3002/todos', { name, date });
-            setname('');
-            setDate('');
-            fetchUsers();
-        } catch (error) {
-            console.error('Error adding user:', error);
-        }
-    };
+  const handleAddTodo = async (e) => {
+    e.preventDefault();
+    if (!task) return;
 
-    const updateUser = async (id) => {
-        try {
-            await axios.put(`http://localhost:3002/todos/${id}`, { name: editName, date: editDate });
-            setEditUserId(null);
-            setEditName('');
-            setEditDate('');
-            fetchUsers();
-        } catch (error) {
-            console.error('Error updating user:', error);
-        }
-    };
+    // Create a new Todo item
+    const newTodo = { userId, task, priority };
 
-    const deleteUser = async (id) => {
-        try {
-            await axios.delete(`http://localhost:3002/todos/${id}`);
-            fetchUsers();
-        } catch (error) {
-            console.error('Error deleting user:', error);
-        }
-    };
+    const response = await fetch('http://localhost:3001/api/todos', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(newTodo),
+    });
 
-    const handleEditClick = (user) => {
-        setEditUserId(user.id);
-        setEditName(user.name);
-        setEditDate(user.date);
-    };
+    if (response.ok) {
+      const addedTodo = await response.json(); // Get the created todo (ensure your server returns the new todo)
+      setTodos([...todos, { id: addedTodo.id, user_id: userId, task: newTodo.task, completed: 0 }]); // Add the new todo to the state
+      setTask(''); // Clear the input field
+    }
+  };
 
-   
+  const handleEditTodo = (todo) => {
+    setTask(todo.task);
+    setPriority(todo.priority);
+    setEditingId(todo.id);
+    setShowEditForm(true);
+  };
+
+  const handleUpdateTodo = async (e) => {
+    e.preventDefault();
+    if (!task) return;
+
+    const response = await fetch(`http://localhost:3001/api/todos/${editingId}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ task, completed: 0 }), // assuming completed is 0 for updates
+    });
+
+    if (response.ok) {
+      const updatedTodo = { id: editingId, task }; // Create updated todo object
+      setTodos(todos.map(todo => (todo.id === editingId ? updatedTodo : todo))); // Update the state
+      setTask('');
+      setEditingId(null);
+      setShowEditForm(false);
+      setPriority('medium');
+    }
+  };
+
+  const handleDeleteTodo = async (id) => {
+    await fetch(`http://localhost:3001/api/todos/${id}`, {
+      method: 'DELETE',
+    });
+    setTodos(todos.filter(todo => todo.id !== id)); // Remove the todo from the state
+  };
+
   return (
-   <>
-  <section className='flex flex-col items-center justify-center bg-green200 '>
+    <div className='flex flex-col justify-center items-center p-6'>
+      <h1 className='text-4xl '>Your Todo List</h1>
+      <form onSubmit={handleAddTodo} className='mb-6 mt-4'>
+        <input
+          type="text"
+          value={task}
+          onChange={(e) => setTask(e.target.value)}
+          placeholder="Add a new task"
+          className='py-3 '
+        />
 
-  
-            <h1 className='text-5xl font-semi-bold'>Todo Lists</h1>
-            <ul>
-                {users.map(user => (
-                    <li key={user.id}>
-                        {editUserId === user.id ? (
-                            <>
-                                <input
-                                    type="text"
-                                    value={editName}
-                                    onChange={(e) => setEditName(e.target.value)}
-                                />
-                                <input
-                                    type="number"
-                                    value={editDate}
-                                    onChange={(e) => setEditDate(e.target.value)}
-                                />
-                                <button onClick={() => updateUser(user.id)}>Update</button>
-                                <button onClick={() => setEditUserId(null)}>Cancel</button>
-                            </>
-                        ) : (
-                            <>
-                                {user.name} - {user.date}
-                                <button onClick={() => handleEditClick(user)}>Edit</button>
-                                <button onClick={() => deleteUser(user.id)}>Delete</button>
-                            </>
-                        )}
-                    </li>
-                ))}
-            </ul>
-            <div className='border-2 border-stone-200n border-solid w-full'>
-            {/* <h2 className='text-3xl'>Add Tasks</h2> */}
-            <input
-                type="text"
-                placeholder="Task"
-                value={name}
-                onChange={(e) => setname(e.target.value)}
-            />
-            <input
-                type="date"
-                value={date}
-                onChange={(e) => setDate(e.target.value)}
-            />
-            <button onClick={addUser}>Add</button>
-            </div>
-          
-           <div className='border-2 border-red-300 border-solid w-full'>
-           <input
-                type="number"
-                placeholder="Search Task By ID"
-                value={userId}
-                onChange={(e) => setUserId(e.target.value)}
-            />
-            <button onClick={() => fetchUser(userId)}>Search</button>
-            {user && (
-                <div>
-                    <h3>User Details</h3>
-                    <p>ID: {user.id}</p>
-                    <p>Name: {user.name}</p>
-                </div>
-            )}
-           </div>
-            <h2>Delete Task by ID</h2>
-            <input
-                type="number"
-                placeholder="Task ID"
-                onChange={(e) => setUserId(e.target.value)}
-            />
-            <button onClick={() => deleteUser(userId)}>Delete</button>
-        
+        <select
+          value={priority}
+          onChange={(e) => setPriority(e.target.value)}
+        >
+          <option value="low">Low Priority</option>
+          <option value="medium">Medium Priority</option>
+          <option value="high">High Priority</option>
+        </select>
 
-  </section>
-   </>
-  )
-}
+        <button type="submit" className='bg-[green] text-[white] py-3 px-2 rounded-md'>Add Todo</button>
+      </form>
+
+      <table className="table-auto border-separate border-spacing-2 border border-fuchsia-400 p-6">
+        <thead>
+          <tr className='p-6'>
+          <th>Priority</th>
+            <th className=' border border-slate-300 bg-fuchsia-400 text-3xl'>Task</th>
+            <th className=' border border-slate-300 bg-fuchsia-400 text-3xl'>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {filteredTodos.length === 0 ? (
+            <tr>
+              <td colSpan="2" style={{ textAlign: 'center', color:"red" }}>No todos available. Add your first task!</td>
+            </tr>
+          ) : (
+            filteredTodos.map((todo) => (
+              <tr key={todo.id}>
+                    <td className='text-[black]'>{todo.priority}</td>
+                <td className='text-3xl'>{todo.task}</td>
+                <td className=''>
+                  <button onClick={() => handleEditTodo(todo)} className='m-4 bg-[green] text-[white] py-2 px-2 rounded-md'>Edit</button>
+                  <button onClick={() => handleDeleteTodo(todo.id)} className='bg-[red] text-[white] py-2 px-2 rounded-md'>Delete</button>
+                </td>
+              </tr>
+            ))
+          )}
+        </tbody>
+      </table>
+
+      {showEditForm && (
+        <div className="edit-form mt-4">
+          <h2 className='font-semibold text-xl'>Edit Todo</h2>
+          <form onSubmit={handleUpdateTodo}>
+            <input
+              type="text"
+              value={task}
+              onChange={(e) => setTask(e.target.value)}
+              placeholder="Edit your task"
+            />
+             <select
+              value={priority}
+              onChange={(e) => setPriority(e.target.value)}
+            >
+              <option value="low">Low Priority</option>
+              <option value="medium">Medium Priority</option>
+              <option value="high">High Priority</option>
+            </select>
+            <button type="submit" className='bg-[green] m-4 text-[white] py-2 px-2 rounded-md'>Update</button>
+            <button type="button" onClick={() => { setShowEditForm(false); setEditingId(null); setTask(''); }} className='bg-[red] text-[white] py-2 px-2 rounded-md'>Cancel</button>
+          </form>
+        </div>
+      )}
+    </div>
+  );
+};
 
 export default Homelist
