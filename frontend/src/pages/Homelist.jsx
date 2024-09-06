@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 const Homelist = ({ userId }) => {
+  console.log(userId);
+  
   const [todos, setTodos] = useState([]);
   const [task, setTask] = useState('');
   const [editingId, setEditingId] = useState(null);
@@ -34,6 +36,8 @@ const Homelist = ({ userId }) => {
     setTodos(data);
     setFilteredTodos(data);
   };
+console.log(todos)
+
 
   const handleAddTodo = async (e) => {
     e.preventDefault();

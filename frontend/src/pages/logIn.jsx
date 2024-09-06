@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 
-const logIn = () => {
+const logIn = ({ onLogin }) => {
 
   const navigate = useNavigate();
   const [username, setUsername] = useState('');
@@ -24,9 +24,11 @@ const logIn = () => {
         body: JSON.stringify({ username, password }),
       });
 
-      const data = await response.json();
+      
       if (response.ok) {
+        const data = await response.json();
         alert(data.message);
+        onLogin(data.userId)
         navigate('/Homelist'); // Navigate to Home page on successful login
       } else {
         setError(data.message);
