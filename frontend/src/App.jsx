@@ -11,6 +11,7 @@ import Registration from './pages/Registration';
 import Footer from "./components/Footer";
 import LogIn from './pages/logIn';
 import Homelist from './pages/Homelist';
+import Nav from './components/nav';
 
 
 function App() {
@@ -21,14 +22,18 @@ function App() {
     setUserId(id); // Set the userId upon successful login
   };
 
+  const handleLogout = () => {
+    setUserId(null); // Clear the userId on logout
+  };
+
   return (
     <>
    <BrowserRouter>
    <div className='w-full  mx-[20px]'>
-    <Navbar />
+    <Navbar  userId={userId} onLogout={handleLogout}/>
     <Routes>
       <Route path='/' element={ <Home/>} /> 
-      <Route index element={<Homelist/>}/>
+      <Route index element={<Home  userId={userId} onLogout={handleLogout}/>}/>
       <Route path='/about-us' element={ <AboutUs/> } /> 
       <Route path='/contact-us' element={ <ContactUs/> } />
       <Route path='/logIn' element={ <LogIn onLogin={handleLogin}/> } />

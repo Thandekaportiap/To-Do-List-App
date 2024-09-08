@@ -3,7 +3,7 @@ import { NavLink, Link } from "react-router-dom";
 import Task from '../assets/task-removebg-preview.png'
 import Best from '../assets/best.webp'
 
-export const Home = () => {
+export const Home = ({ userId, onLogout }) => {
     return(
 <>
 <section className='flex justify-around h-screen bg-gradient-to-tr from-purple-800 to-purple-500'>
@@ -13,6 +13,18 @@ export const Home = () => {
                 task Effortlessy
                 </h1>
                 <h4 className='lg:size-6 lg:font-normal lg:text-4xl text-[white] ssm:font-normal ssm:text-base inline mb-4'>Stay on top of every task</h4>
+                {userId ? (
+            <>
+              <div>
+              <NavLink to={'/Homelist'}>
+        <button className="mt-24 bg-gradient-to-r from-pink-500 to-violet-500  text-white font-bold py-2 px-6 rounded lg:py-4 lg:px-10 ssm:py-1,5 ssm:px-4 ">
+          My Todos
+        </button>
+        </NavLink>
+              </div>
+            </>
+          ) : (
+            <>
                 <div>
                 <NavLink to={"/ Registration"}>
         <button className="mt-24 bg-slate-800  hover:bg-rose-400 text-white font-bold py-2 px-6 rounded lg:py-3 lg:px-8 ssm:py-1,5 ssm:px-4 mr-1">
@@ -25,7 +37,8 @@ export const Home = () => {
         </button>
         </NavLink>
                 </div>
-                 
+                </>
+          )}  
             </div>
             <div className="mt-40">
                 <img src={Best} alt="hero" className='mr-4 rounded-lg  lg:w-fit lg:h-96 ssm:h-32 ssm:w-36 ssm:invisible' />

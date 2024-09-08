@@ -98,60 +98,53 @@ console.log(todos)
   };
 
   return (
-    <div className='flex flex-col justify-center items-center p-6'>
+    <div className='flex flex-col items-center justify-center p-6'>
       <h1 className='text-4xl '>Your Todo List</h1>
-      <form onSubmit={handleAddTodo} className='mb-6 mt-4'>
+      <form onSubmit={handleAddTodo} className='mt-4 mb-6'>
         <input
           type="text"
           value={task}
           onChange={(e) => setTask(e.target.value)}
           placeholder="Add a new task"
-          className='py-3 '
+         required
+            className="flex-1 px-3 py-2 border rounded"
         />
 
         <select
           value={priority}
           onChange={(e) => setPriority(e.target.value)}
+           className="px-3 py-2 border rounded"
         >
-          <option value="low">Low Priority</option>
-          <option value="medium">Medium Priority</option>
-          <option value="high">High Priority</option>
+          <option >Low</option>
+          <option >Medium</option>
+          <option >High</option>
         </select>
 
         <button type="submit" className='bg-[green] text-[white] py-3 px-2 rounded-md'>Add Todo</button>
       </form>
 
-      <table className="table-auto border-separate border-spacing-2 border border-fuchsia-400 p-6">
-        <thead>
-          <tr className='p-6'>
-          <th>Priority</th>
-            <th className=' border border-slate-300 bg-fuchsia-400 text-3xl'>Task</th>
-            <th className=' border border-slate-300 bg-fuchsia-400 text-3xl'>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {filteredTodos.length === 0 ? (
-            <tr>
-              <td colSpan="2" style={{ textAlign: 'center', color:"red" }}>No todos available. Add your first task!</td>
-            </tr>
-          ) : (
-            filteredTodos.map((todo) => (
-              <tr key={todo.id}>
-                    <td className='text-[black]'>{todo.priority}</td>
-                <td className='text-3xl'>{todo.task}</td>
-                <td className=''>
-                  <button onClick={() => handleEditTodo(todo)} className='m-4 bg-[green] text-[white] py-2 px-2 rounded-md'>Edit</button>
-                  <button onClick={() => handleDeleteTodo(todo.id)} className='bg-[red] text-[white] py-2 px-2 rounded-md'>Delete</button>
-                </td>
-              </tr>
-            ))
-          )}
-        </tbody>
-      </table>
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {filteredTodos.length === 0 ? (
+          <div className="col-span-3 text-center text-3xl text-[red]">No todos available that match your search. Add your first task!</div>
+        ) : (
+          filteredTodos.map((todo) => (
+            <div key={todo.id} className="flex flex-col w-full p-8 rounded-lg shadow-md bg-gradient-to-r from-pink-500 to-violet-500">
+              <div className="flex-1">
+                <h2 className="mb-6 text-3xl font-semibold">{todo.task}</h2>
+                <div className="mx-7 badge badge-secondary"><p className="p-3 text-lg gray-500">Priority{todo.priority}</p></div>
+              </div>
+              <div className="mt-2">
+                <button onClick={() => handleEditTodo(todo)} className="px-3 py-1 mr-5 text-white bg-green-500 rounded">Edit</button>
+                <button onClick={() => handleDeleteTodo(todo.id)} className="px-3 py-1 text-white bg-red-500 rounded">Delete</button>
+              </div>
+            </div>
+          ))
+        )}
+      </div>
 
       {showEditForm && (
-        <div className="edit-form mt-4">
-          <h2 className='font-semibold text-xl'>Edit Todo</h2>
+        <div className="mt-4 edit-form">
+          <h2 className='text-xl font-semibold'>Edit Todo</h2>
           <form onSubmit={handleUpdateTodo}>
             <input
               type="text"
