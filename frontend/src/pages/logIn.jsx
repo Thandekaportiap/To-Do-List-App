@@ -2,9 +2,10 @@
 import { NavLink } from 'react-router-dom';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import Swal from 'sweetalert2'
 
 
-const logIn = () => {
+const logIn = ({ onLogin }) => {
 
   const navigate = useNavigate();
   const [username, setUsername] = useState('');
@@ -24,10 +25,21 @@ const logIn = () => {
         body: JSON.stringify({ username, password }),
       });
 
-      const data = await response.json();
+      
       if (response.ok) {
         alert(data.message);
         navigate('/'); // Navigate to Home page on successful login
+        const data = await response.json();
+        Swal.fire({
+          position: "top-end",
+          icon: "success",
+          title: "Successfully Login",
+          showConfirmButton: false,
+          timer: 1500
+        });
+        localStorage.setItem('userId', data.userId);
+        onLogin(data.userId)
+        navigate('/Homelist'); // Navigate to Home page on successful login
       } else {
         setError(data.message);
       }
@@ -37,14 +49,15 @@ const logIn = () => {
     }
   };
 
+  // console.log(data.userId)
 
     return (
   <>
   <div className="flex flex-col items-center justify-center h-screen bg-gray-100">
   
-        <div className="w-1/2 bg-white p-5 rounded shadow">
-          <h1 className="text-3xl font-bold mb-2 text-center">Welcome Back!</h1>
-          <p className="text-gray-600 mb-8 text-center">Login Using Your UserName and Password</p>
+        <div className="w-1/2 p-5 bg-white rounded shadow">
+          <h1 className="mb-2 text-3xl font-bold text-center">Welcome Back!</h1>
+          <p className="mb-8 text-center text-gray-600">Login Using Your UserName and Password</p>
           <form onSubmit={handleSubmit}>
           <div className="mb-4">
             <label htmlFor="user-name" className="block mb-1 font-medium">UserName</label>
@@ -59,12 +72,12 @@ const logIn = () => {
              onChange={(e) => setPassword(e.target.value)}  />
           </div>
          
-          <a href="#" className="text-gray-600 underline text-sm">Forget password?</a>
+          <a href="#" className="text-sm text-gray-600 underline">Forget password?</a>
           {error && <p style={{color: 'red'}}>{error}</p>}
-          <button className="bg-purple-500 text-white px-4 py-2 rounded-md mt-8 w-full">Login</button>
+          <button className="w-full px-4 py-2 mt-8 text-white bg-purple-500 rounded-md">Login</button>
           </form>
           <h3>Dont have an Account?</h3>
-          <NavLink to={"/ Registration"}><button className="bg-violet-200 hover:bg-purple-500 text-primary px-4 py-2 rounded-md mt-8 w-full">Signup</button></NavLink>
+          <NavLink to={"/ Registration"}><button className="w-full px-4 py-2 mt-8 rounded-md bg-violet-200 hover:bg-purple-500 text-primary">Signup</button></NavLink>
         </div>
       </div>
   

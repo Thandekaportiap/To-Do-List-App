@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 const Homelist = ({ userId }) => {
+  console.log(userId);
+  
   const [todos, setTodos] = useState([]);
   const [task, setTask] = useState('');
   const [editingId, setEditingId] = useState(null);
@@ -34,6 +36,8 @@ const Homelist = ({ userId }) => {
     setTodos(data);
     setFilteredTodos(data);
   };
+console.log(todos)
+
 
   const handleAddTodo = async (e) => {
     e.preventDefault();
@@ -94,25 +98,27 @@ const Homelist = ({ userId }) => {
   };
 
   return (
-    <div className='flex flex-col justify-center items-center p-6'>
+    <div className='flex flex-col items-center justify-center p-6'>
       <h1 className='text-4xl '>Your Todo List</h1>
-      <form onSubmit={handleAddTodo} className='mb-6 mt-4'>
+      <form onSubmit={handleAddTodo} className='mt-4 mb-6'>
         <input
           type="text"
           value={task}
           onChange={(e) => setTask(e.target.value)}
           placeholder="Add a new task"
-          className='py-3 '
+         required
+            className="flex-1 px-3 py-2 border rounded"
         />
         <input type="date"/>
 
         <select
           value={priority}
           onChange={(e) => setPriority(e.target.value)}
+           className="px-3 py-2 border rounded"
         >
-          <option >Low</option>
-          <option >Medium</option>
-          <option>High</option>
+          <option value="low">Low Priority</option>
+          <option value="medium">Medium Priority</option>
+          <option value="high">High Priority</option>
         </select>
 
         <button type="submit" className='bg-[green] text-[white] py-3 px-2 rounded-md'>Add Todo</button>
@@ -120,8 +126,8 @@ const Homelist = ({ userId }) => {
 
       <table className="table-auto border-separate border-spacing-2 border border-fuchsia-400 p-6">
         <thead>
-          <tr className=''>
-          
+          <tr className='p-6'>
+          <th>Priority</th>
             <th className=' border border-slate-300 bg-fuchsia-400 text-3xl'>Task</th>
             <th className=' border border-slate-300 bg-fuchsia-400 text-3xl'>Actions</th>
           </tr>
@@ -134,13 +140,11 @@ const Homelist = ({ userId }) => {
           ) : (
             filteredTodos.map((todo) => (
               <tr key={todo.id}>
-                 
-                   
-                <td className='text-3xl border border-slate-300 p-3'>{todo.task}</td>
-                <td className='flex flex-row border border-slate-300 p-3'>
-               
+                    <td className='text-[black]'>{todo.priority}</td>
+                <td className='text-3xl'>{todo.task}</td>
+                <td className=''>
                   <button onClick={() => handleEditTodo(todo)} className='m-4 bg-[green] text-[white] py-2 px-2 rounded-md'>Edit</button>
-                  <button onClick={() => handleDeleteTodo(todo.id)} className='m-4 bg-[red] text-[white] py-2 px-2 rounded-md'>Delete</button>
+                  <button onClick={() => handleDeleteTodo(todo.id)} className='bg-[red] text-[white] py-2 px-2 rounded-md'>Delete</button>
                 </td>
               </tr>
             ))
@@ -149,8 +153,8 @@ const Homelist = ({ userId }) => {
       </table>
 
       {showEditForm && (
-        <div className="edit-form mt-4">
-          <h2 className='font-semibold text-xl'>Edit Todo</h2>
+        <div className="mt-4 edit-form">
+          <h2 className='text-xl font-semibold'>Edit Todo</h2>
           <form onSubmit={handleUpdateTodo}>
             <input
               type="text"

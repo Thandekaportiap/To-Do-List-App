@@ -13,26 +13,38 @@ import LogIn from './pages/logIn';
 import Homelist from './pages/Homelist';
 import NoPage from './pages/Nopage.jsx';
 import Layout from './pages/layout.jsx';
+import Nav from './components/nav';
+
 
 function App() {
 
+  const [userId, setUserId] = useState(null); // State to hold current user's ID
+
+  const handleLogin = (id) => {
+    setUserId(id); // Set the userId upon successful login
+  };
+
+  const handleLogout = () => {
+    setUserId(null); // Clear the userId on logout
+  };
+
   return (
     <>
-   
    <BrowserRouter>
-
    <div className='w-full  mx-[20px]'>
-    <Navbar />
-
+    <Navbar  userId={userId} onLogout={handleLogout}/>
     <Routes>
       <Route path='/' element={ <Home/>} /> 
       {/* <Route index element={<Home/>}/> */}
+      <Route index element={<Home  userId={userId} onLogout={handleLogout}/>}/>
       <Route path='/about-us' element={ <AboutUs/> } /> 
       <Route path='/contact-us' element={ <ContactUs/> } />
-      <Route path='/logIn' element={ <LogIn/> } />
+      <Route path='/logIn' element={ <LogIn onLogin={handleLogin}/> } />
       <Route path='/ Registration' element={ < Registration/> } /> 
       <Route path='/Homelist' element={ <Homelist/> } />
       <Route path="*" element={<NoPage />} />
+      <Route path='/Homelist' element={ <Homelist userId={userId}/> } />
+     
     </Routes>
     <Footer/>
     </div> 

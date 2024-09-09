@@ -3,7 +3,7 @@ import { AiOutlineMenu, AiOutlineClose } from "react-icons/ai"; // Import menu i
 import { NavLink } from 'react-router-dom';
 import Logo  from '../assets/logo.jfif'
 
-const Navbar = () => {
+const Navbar = ({ userId, onLogout }) => {
     // State to handle the navbar's open/close status
     const [openNav, setOpenNav] = useState(true);
 
@@ -17,8 +17,6 @@ const Navbar = () => {
             {/* Main Navigation Bar */}
             <nav className='bg-purple-700 " text-white w-full flex justify-between items-center h-20 mx-auto px-5'>
                 
-                {/* Logo */}
-                {/* <img src={Logo} alt="" style={{width:"5%",height:"80%"}} /> */}
                 <h1 className="text-[white]">TDList</h1>
                 {/* Desktop Navigation Links */}
                 <ul className='hidden md:flex space-x-6 text-xl text-[white] font-semibold'>
@@ -31,10 +29,22 @@ const Navbar = () => {
                 </ul>
                 
                 {/* Desktop Buttons */}
+                {userId ? (
+                    <>
+                    <div className='hidden space-x-4 md:flex'>
+                    <button onClick={onLogout} className="bg-red-500 px-4 py-2 rounded">
+                      Logout
+                    </button>
+                    </div>
+                  </>
+                ) : (
+                  <>
                 <div className='hidden space-x-4 md:flex'>
                 <NavLink to={'/logIn'}><button className='bg-violet-200 px-4 py-2 text-[black] font-bold rounded-md'>Login</button></NavLink>
                     <NavLink to={"/ Registration"}><button className='bg-violet-200 px-4 py-2 text-[black] font-bold rounded-md'>Register</button></NavLink>
                 </div>
+                </>
+          )}
                 
                 {/* Hamburger Menu Icon for Mobile */}
                 <div className='fixed md:hidden right-6' onClick={ToggleNavBar}>
@@ -56,10 +66,20 @@ const Navbar = () => {
                     </ul>
                     
                     {/* Mobile Buttons */}
+                    {userId ? (
+                    <>
+                    <button onClick={onLogout} className="bg-red-500 px-4 py-2 rounded">
+                      Logout
+                    </button>
+                  </>
+                ) : (
+                  <>
                     <div className='block pt-5 space-y-4'>
                     <NavLink to={'/logIn'}><button className='bg-violet-200 w-full py-2 text-[black] font-bold rounded-md block'>Login</button></NavLink>
                     <NavLink to={"/ Registration"}><button className='bg-violet-200 w-full py-2 text-[black] font-bold rounded-md'>Register</button></NavLink>
                     </div>
+                    </>
+          )}
                 </div>
             </nav>
         </>
