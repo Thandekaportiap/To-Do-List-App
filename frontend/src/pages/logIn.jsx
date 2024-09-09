@@ -47,7 +47,7 @@ const logIn = ({ onLogin }) => {
     }
   };
 
-  console.log(data.userId)
+  // console.log(data.userId)
 
     return (
   <>

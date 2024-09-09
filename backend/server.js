@@ -17,7 +17,7 @@ const db = new sqlite3.Database(':memory:');
 // Create users and todos tables
 db.serialize(() => {
   db.run("CREATE TABLE users (id INTEGER PRIMARY KEY, username TEXT UNIQUE, password TEXT)");
-  db.run("CREATE TABLE todos (id INTEGER PRIMARY KEY, user_id INTEGER, task TEXT, completed INTEGER DEFAULT 0, FOREIGN KEY(user_id) REFERENCES users(id))");
+  db.run("CREATE TABLE todos (id INTEGER PRIMARY KEY, user_id INTEGER, task TEXT, priority TEXT, FOREIGN KEY(user_id) REFERENCES users(id))");
 });
 
 // User registration
@@ -57,7 +57,7 @@ app.post('/api/login', async (req, res) => {
 // CRUD endpoints for todos
 app.post('/api/todos', (req, res) => {
   const { userId, task } = req.body;
-  const stmt = db.prepare("INSERT INTO todos (user_id, task) VALUES (?, ?)");
+  const stmt = db.prepare("INSERT INTO todos (user_id, task, priority) VALUES (?, ?, ?)");
   stmt.run(userId, task, function(err) {
     if (err) {
       return res.status(500).json({ message: "Error adding todo." });

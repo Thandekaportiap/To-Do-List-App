@@ -97,6 +97,15 @@ console.log(todos)
     setTodos(todos.filter(todo => todo.id !== id)); // Remove the todo from the state
   };
 
+  let bgColor;
+  if (priority === 'high') {
+    bgColor = 'bg-red-500';
+  } else if (priority === 'medium') {
+    bgColor = 'bg-orange-500';
+  } else {
+    bgColor = 'bg-green-500';
+  }
+
   return (
     <div className='flex flex-col items-center justify-center p-6'>
       <h1 className='text-4xl '>Your Todo List</h1>
@@ -128,10 +137,11 @@ console.log(todos)
           <div className="col-span-3 text-center text-3xl text-[red]">No todos available that match your search. Add your first task!</div>
         ) : (
           filteredTodos.map((todo) => (
+            
             <div key={todo.id} className="flex flex-col w-full p-8 rounded-lg shadow-md bg-gradient-to-r from-pink-500 to-violet-500">
               <div className="flex-1">
                 <h2 className="mb-6 text-3xl font-semibold">{todo.task}</h2>
-                <div className="mx-7 badge badge-secondary"><p className="p-3 text-lg gray-500">Priority{todo.priority}</p></div>
+                <div className="mx-7 badge badge-secondary" ><p className="p-3 text-lg gray-500">Priority{todo.priority}</p></div>
               </div>
               <div className="mt-2">
                 <button onClick={() => handleEditTodo(todo)} className="px-3 py-1 mr-5 text-white bg-green-500 rounded">Edit</button>
