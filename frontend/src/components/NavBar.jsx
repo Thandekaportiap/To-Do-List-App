@@ -17,7 +17,7 @@ const Navbar = ({ userId, onLogout }) => {
             {/* Main Navigation Bar */}
             <nav className='bg-purple-700 " text-white w-full flex justify-between items-center h-20 mx-auto px-5'>
                 
-                <h1 className="text-[white]">TDList</h1>
+                <h1 className="text-2xl">TDList</h1>
                 {/* Desktop Navigation Links */}
                 <ul className='hidden md:flex space-x-6 text-xl text-[white] font-semibold'>
 
