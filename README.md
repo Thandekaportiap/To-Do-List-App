@@ -27,5 +27,9 @@ Start the react server
 ```bash
   npm run dev
 ```
+Start the Backend server
+```bash
+  nodemon server.js
+```
 ## Tech Stack
-**Client:** React JS, HTML5, JavaScript, Node js, Express, Sqlite, Tailwind CSS
+**Client:** React JS, JavaScript, Node js, Express, Sqlite3, Tailwind CSS
