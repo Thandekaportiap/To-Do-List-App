@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import Swal from 'sweetalert2';
 
 const Homelist = ({ userId }) => {
   console.log(userId);
@@ -102,10 +103,29 @@ console.log(todos)
   };
 
   const handleDeleteTodo = async (id) => {
-    await fetch(`http://localhost:3001/api/todos/${id}`, {
-      method: 'DELETE',
+    // Use SweetAlert2 to confirm deletion
+    const result = await Swal.fire({
+      title: 'Are you sure?',
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#3085d6',
+      confirmButtonText: 'Yes, delete it!',
+      cancelButtonText: 'No, cancel!',
     });
-    setTodos(todos.filter(todo => todo.id !== id)); // Remove the todo from the state
+
+    if (result.isConfirmed) {
+      await fetch(`http://localhost:3001/api/todos/${id}`, {
+        method: 'DELETE',
+      });
+      setTodos(todos.filter(todo => todo.id !== id));
+      Swal.fire(
+        'Deleted!',
+        'Your todo has been deleted.',
+        'success'
+      );
+    }
   };
 
   return (
