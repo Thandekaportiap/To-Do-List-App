@@ -17,7 +17,7 @@ const db = new sqlite3.Database(':memory:');
 // Create users and todos tables
 db.serialize(() => {
   db.run("CREATE TABLE users (id INTEGER PRIMARY KEY, username TEXT UNIQUE, password TEXT)");
-  db.run("CREATE TABLE todos (id INTEGER PRIMARY KEY, user_id INTEGER, task TEXT, priority TEXT, FOREIGN KEY(user_id) REFERENCES users(id))");
+  db.run("CREATE TABLE todos (id INTEGER PRIMARY KEY, user_id INTEGER, task TEXT, description TEXT, priority TEXT, priorityDate TEXT, completed INTEGER DEFAULT 0, FOREIGN KEY(user_id) REFERENCES users(id))");
 });
 
 // User registration
@@ -56,9 +56,9 @@ app.post('/api/login', async (req, res) => {
 
 // CRUD endpoints for todos
 app.post('/api/todos', (req, res) => {
-  const { userId, task } = req.body;
-  const stmt = db.prepare("INSERT INTO todos (user_id, task, priority) VALUES (?, ?, ?)");
-  stmt.run(userId, task, function(err) {
+  const { userId, task, description, priority, priorityDate } = req.body;
+  const stmt = db.prepare("INSERT INTO todos (user_id, task, description, priority, priorityDate) VALUES (?, ?, ?, ?, ?)");
+  stmt.run(userId, task, description, priority, priorityDate, function(err) {
     if (err) {
       return res.status(500).json({ message: "Error adding todo." });
     }
@@ -77,14 +77,27 @@ app.get('/api/todos/:userId', (req, res) => {
 });
 
 app.put('/api/todos/:id', (req, res) => {
-  const { task, completed } = req.body;
-  db.run("UPDATE todos SET task = ?, completed = ? WHERE id = ?", [task, completed, req.params.id], function(err) {
-    if (err) {
-      return res.status(500).json({ message: "Error updating todo." });
+  const { task, description, priority, priorityDate } = req.body;
+
+  if (!task || !description || !priority || !priorityDate) {
+    return res.status(400).json({ message: "All fields are required." });
+  }
+
+  db.run(
+    "UPDATE todos SET task = ?, description = ?, priority = ?, priorityDate = ? WHERE id = ?",
+    [task, description, priority, priorityDate, req.params.id],
+    function(err) {
+      if (err) {
+        return res.status(500).json({ message: "Error updating todo." });
+      }
+      if (this.changes === 0) {
+        return res.status(404).json({ message: "Todo not found." });
+      }
+      res.json({ message: "Todo updated successfully!" });
     }
-    res.json({ message: "Todo updated successfully!" });
-  });
+  );
 });
+
 
 app.delete('/api/todos/:id', (req, res) => {
   db.run("DELETE FROM todos WHERE id = ?", [req.params.id], function(err) {
