@@ -44,7 +44,7 @@ const registration = () => {
       const data = await response.json();
       if (response.ok) {
         alert(data.message);
-        navigate('/Homelist'); // Navigate to Home page after successful registration
+        navigate('/Homelist'); 
       } else {
         alert("Registration failed: " + data.message);
       }

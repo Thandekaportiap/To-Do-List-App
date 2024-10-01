@@ -46,7 +46,7 @@ console.log(todos)
     e.preventDefault();
     if (!task) return;
 
-    // Create a new Todo item
+    
     // const newTodo = { userId, task, priority };
     const newTodo = { userId, task, description, priority, priorityDate };
 
@@ -59,20 +59,20 @@ console.log(todos)
     });
 
     if (response.ok) {
-      const addedTodo = await response.json(); // Get the created todo (ensure your server returns the new todo)
-      setTodos([...todos, { id: addedTodo.id, ...newTodo }]); // Add new todo to state
+      const addedTodo = await response.json(); 
+      setTodos([...todos, { id: addedTodo.id, ...newTodo }]); 
       setTask('');
-      setDescription(''); // Clear the description field
+      setDescription(''); 
       setPriority('medium');
-      setPriorityDate(''); // Clear the date field
+      setPriorityDate(''); 
     }
   };
 
   const handleEditTodo = (todo) => {
     setTask(todo.task);
-    setDescription(todo.description); // Set the current description
+    setDescription(todo.description); 
     setPriority(todo.priority);
-    setPriorityDate(todo.priorityDate); // Set the current priority date
+    setPriorityDate(todo.priorityDate);
     setEditingId(todo.id);
     setShowEditForm(true);
   };
@@ -105,7 +105,7 @@ console.log(todos)
     await fetch(`http://localhost:3001/api/todos/${id}`, {
       method: 'DELETE',
     });
-    setTodos(todos.filter(todo => todo.id !== id)); // Remove the todo from the state
+    setTodos(todos.filter(todo => todo.id !== id)); 
   };
 
   return (
@@ -164,9 +164,8 @@ console.log(todos)
           <div className="text-center col-span-3 text-2xl">No todos available that match your search. Add your first task!</div>
         ) : (
           filteredTodos.map((todo) => {
-            let bgColor; // Variable for background color
+            let bgColor; 
 
-            // Determine background color based on priority
             if (todo.priority === 'high') {
               bgColor = 'bg-red-500';
             } else if (todo.priority === 'medium') {

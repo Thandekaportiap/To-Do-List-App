@@ -37,7 +37,7 @@ const logIn = ({ onLogin }) => {
         });
         localStorage.setItem('userId', data.userId);
         onLogin(data.userId)
-        navigate('/Homelist'); // Navigate to Home page on successful login
+        navigate('/Homelist'); 
       } else {
         setError(data.message);
       }

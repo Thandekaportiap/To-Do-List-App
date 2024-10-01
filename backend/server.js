@@ -14,7 +14,6 @@ app.use(bodyParser.json());
 // Initialize SQLite database
 const db = new sqlite3.Database(':memory:');
 
-// Create users and todos tables
 db.serialize(() => {
   db.run("CREATE TABLE users (id INTEGER PRIMARY KEY, username TEXT UNIQUE, password TEXT)");
   db.run("CREATE TABLE todos (id INTEGER PRIMARY KEY, user_id INTEGER, task TEXT, description TEXT, priority TEXT, priorityDate TEXT, completed INTEGER DEFAULT 0, FOREIGN KEY(user_id) REFERENCES users(id))");

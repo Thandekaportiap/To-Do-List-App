@@ -11,19 +11,19 @@ import Registration from './pages/Registration';
 import Footer from "./components/Footer";
 import LogIn from './pages/logIn';
 import Homelist from './pages/Homelist';
-import Nav from './components/nav';
+
 
 
 function App() {
 
-  const [userId, setUserId] = useState(null); // State to hold current user's ID
+  const [userId, setUserId] = useState(null); 
 
   const handleLogin = (id) => {
-    setUserId(id); // Set the userId upon successful login
+    setUserId(id); 
   };
 
   const handleLogout = () => {
-    setUserId(null); // Clear the userId on logout
+    setUserId(null); 
   };
 
   return (
