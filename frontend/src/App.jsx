@@ -29,7 +29,7 @@ function App() {
   return (
     <>
    <BrowserRouter>
-   <div className='w-full  mx-[20px]'>
+   <div className=''>
     <Navbar  userId={userId} onLogout={handleLogout}/>
     <Routes>
       <Route path='/' element={ <Home/>} /> 

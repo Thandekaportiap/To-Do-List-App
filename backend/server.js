@@ -11,12 +11,22 @@ const port = 3001;
 app.use(cors());
 app.use(bodyParser.json());
 
-// Initialize SQLite database
-const db = new sqlite3.Database(':memory:');
+// Initialize SQLite database with a persistent file
+const db = new sqlite3.Database('./todolists.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
+  if (err) {
+    console.error('Error opening the database:', err.message);
+  } else {
+    console.log('Connected to the SQLite database.');
+  }
+});
 
+// Create users and todos tables if they don't exist
 db.serialize(() => {
-  db.run("CREATE TABLE users (id INTEGER PRIMARY KEY, username TEXT UNIQUE, password TEXT)");
-  db.run("CREATE TABLE todos (id INTEGER PRIMARY KEY, user_id INTEGER, task TEXT, description TEXT, priority TEXT, priorityDate TEXT, completed INTEGER DEFAULT 0, FOREIGN KEY(user_id) REFERENCES users(id))");
+  // Create users table
+  db.run("CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY, username TEXT UNIQUE, password TEXT)");
+
+  // Create todos table with additional fields: description, priority, and priorityDate
+  db.run("CREATE TABLE IF NOT EXISTS todos (id INTEGER PRIMARY KEY, user_id INTEGER, task TEXT, description TEXT, priority TEXT, priorityDate TEXT, completed INTEGER DEFAULT 0, FOREIGN KEY(user_id) REFERENCES users(id))");
 });
 
 // User registration
@@ -77,7 +87,6 @@ app.get('/api/todos/:userId', (req, res) => {
 
 app.put('/api/todos/:id', (req, res) => {
   const { task, description, priority, priorityDate } = req.body;
-
   if (!task || !description || !priority || !priorityDate) {
     return res.status(400).json({ message: "All fields are required." });
   }

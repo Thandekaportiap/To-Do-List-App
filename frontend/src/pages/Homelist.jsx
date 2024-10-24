@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import Swal from 'sweetalert2';
 
 const Homelist = ({ userId }) => {
   console.log(userId);
@@ -33,24 +34,28 @@ const Homelist = ({ userId }) => {
     );
   }, [searchTerm, todos]);
 
-  const fetchTodos = async () => {
-    const response = await fetch(`http://localhost:3001/api/todos/${userId}`);
+const fetchTodos = async () => {
+  try {
+    const response = await fetch(`https://to-do-list-app-3-c106.onrender.com/todos/${userId}`);
+    if (!response.ok) throw new Error('Failed to fetch todos');
     const data = await response.json();
     setTodos(data);
     setFilteredTodos(data);
-  };
-console.log(todos)
+  } catch (error) {
+    console.error(error);
+    Swal.fire('Error', 'Could not fetch todos. Please try again later.', 'error');
+  }
+};
 
 
-  const handleAddTodo = async (e) => {
-    e.preventDefault();
-    if (!task) return;
+const handleAddTodo = async (e) => {
+  e.preventDefault();
+  if (!task) return;
 
-    
-    // const newTodo = { userId, task, priority };
-    const newTodo = { userId, task, description, priority, priorityDate };
+  const newTodo = { userId, task, description, priority, priorityDate };
 
-    const response = await fetch('http://localhost:3001/api/todos', {
+  try {
+    const response = await fetch(`https://to-do-list-app-3-c106.onrender.com/api/todos`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -58,15 +63,18 @@ console.log(todos)
       body: JSON.stringify(newTodo),
     });
 
-    if (response.ok) {
-      const addedTodo = await response.json(); 
-      setTodos([...todos, { id: addedTodo.id, ...newTodo }]); 
-      setTask('');
-      setDescription(''); 
-      setPriority('medium');
-      setPriorityDate(''); 
-    }
-  };
+    if (!response.ok) throw new Error('Failed to add todo');
+    const addedTodo = await response.json();
+    setTodos([...todos, { id: addedTodo.id, ...newTodo }]);
+    setTask('');
+    setDescription('');
+    setPriority('medium');
+    setPriorityDate('');
+  } catch (error) {
+    console.error(error);
+    Swal.fire('Error', 'Could not add todo. Please try again later.', 'error');
+  }
+};
 
   const handleEditTodo = (todo) => {
     setTask(todo.task);
@@ -81,15 +89,16 @@ console.log(todos)
     e.preventDefault();
     if (!task || !description || !priority || !priorityDate) return;
   
-    const response = await fetch(`http://localhost:3001/api/todos/${editingId}`, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ task, description, priority, priorityDate }), // Include all new fields
-    });
+    try {
+      const response = await fetch(`https://to-do-list-app-3-c106.onrender.com/api/todos/${editingId}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ task, description, priority, priorityDate }),
+      });
   
-    if (response.ok) {
+      if (!response.ok) throw new Error('Failed to update todo');
       const updatedTodo = { id: editingId, task, description, priority, priorityDate };
       setTodos(todos.map(todo => (todo.id === editingId ? updatedTodo : todo)));
       setTask('');
@@ -98,14 +107,36 @@ console.log(todos)
       setShowEditForm(false);
       setPriority('medium');
       setPriorityDate('');
+    } catch (error) {
+      console.error(error);
+      Swal.fire('Error', 'Could not update todo. Please try again later.', 'error');
     }
   };
-
   const handleDeleteTodo = async (id) => {
-    await fetch(`http://localhost:3001/api/todos/${id}`, {
-      method: 'DELETE',
+    const result = await Swal.fire({
+      title: 'Are you sure?',
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#3085d6',
+      confirmButtonText: 'Yes, delete it!',
+      cancelButtonText: 'No, cancel!',
     });
-    setTodos(todos.filter(todo => todo.id !== id)); 
+  
+    if (result.isConfirmed) {
+      try {
+        const response = await fetch(`https://to-do-list-app-3-c106.onrender.com/api/todos/${id}`, {
+          method: 'DELETE',
+        });
+        if (!response.ok) throw new Error('Failed to delete todo');
+        setTodos(todos.filter(todo => todo.id !== id));
+        Swal.fire('Deleted!', 'Your todo has been deleted.', 'success');
+      } catch (error) {
+        console.error(error);
+        Swal.fire('Error', 'Could not delete todo. Please try again later.', 'error');
+      }
+    }
   };
 
   return (
