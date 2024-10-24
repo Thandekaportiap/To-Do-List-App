@@ -33,7 +33,7 @@ const Registration = () => {
     if (!validateForm()) return;
 
     try {
-      const response = await fetch('https://to-do-list-app-3-c106.onrender.com/api/register', {
+      const response = await fetch('https://to-do-list-app-6-lrky.onrender.com/api/register', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
