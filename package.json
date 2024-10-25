@@ -1,8 +1,5 @@
 {
   "dependencies": {
-    "sweetalert2": "^11.13.2"
-  },
-  "devDependencies": {
-    "vite": "^5.4.10"
+    "sweetalert2": "^11.14.4"
   }
 }
