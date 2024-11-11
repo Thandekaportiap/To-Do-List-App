@@ -152,8 +152,8 @@ const handleAddTodo = async (e) => {
       
       <h1 className='text-5xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-sky-600 to-indigo-800'>Your Todo List</h1>
       {showAddForm ? (
-      <form onSubmit={handleAddTodo} className='mt-4 mb-6 p-4 bg-zinc-300 rounded-xl w-6/12'>
-      <div className="flex flex-col space-x-2">
+      <form onSubmit={handleAddTodo} className='mt-4 mb-6 lg:p-4 sm:p-1 bg-zinc-300 rounded-xl lg:w-6/12 sm:w-full'>
+      <div className="flex flex-col lg:space-x-2 sm:space-x-1">
           <input
             type="text"
             value={task}
