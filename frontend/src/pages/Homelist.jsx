@@ -55,7 +55,7 @@ const handleAddTodo = async (e) => {
   const newTodo = { userId, task, description, priority, priorityDate };
 
   try {
-    const response = await fetch(`https://to-do-list-app-6-lrky.onrender.com/api/todos`, {
+    const response = await fetch(`https://to-do-list-app-6-lrky.onrender.com/todos`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -90,7 +90,7 @@ const handleAddTodo = async (e) => {
     if (!task || !description || !priority || !priorityDate) return;
   
     try {
-      const response = await fetch(`https://to-do-list-app-6-lrky.onrender.com/api/todos/${editingId}`, {
+      const response = await fetch(`https://to-do-list-app-6-lrky.onrender.com/todos/${editingId}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -126,7 +126,7 @@ const handleAddTodo = async (e) => {
   
     if (result.isConfirmed) {
       try {
-        const response = await fetch(`https://to-do-list-app-6-lrky.onrender.com/api/todos/${id}`, {
+        const response = await fetch(`https://to-do-list-app-6-lrky.onrender.com/todos/${id}`, {
           method: 'DELETE',
         });
         if (!response.ok) throw new Error('Failed to delete todo');
